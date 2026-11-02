@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CITY KINGS — Streetwear from Lesotho</title>
+<meta name="description" content="CITY KINGS is a streetwear label from Lesotho. Explore the collection and order directly via WhatsApp.">
+<meta property="og:title" content="CITY KINGS — Built Different">
+<meta property="og:description" content="Streetwear from Lesotho. Not made to blend in.">
+<meta property="og:type" content="website">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== DESIGN TOKENS ===== */
+:root{--ink:#0d0d0c;--bone:#efebe3;--clay:#b8452a;--gold:#c9a24a;--mute:#7a766e;--line:rgba(13,13,12,.14)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bone);color:var(--ink);overflow-x:hidden}
+.disp{font-family:Anton,Impact,sans-serif;text-transform:uppercase;letter-spacing:.01em;line-height:.88}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--clay);outline-offset:3px}
+.btn{display:inline-flex;align-items:center;gap:.6rem;padding:1rem 1.6rem;font-weight:600;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;border:1.5px solid currentColor;transition:background .3s,color .3s,transform .3s;cursor:pointer;min-height:48px}
+.btn-solid{background:var(--bone);color:var(--ink);border-color:var(--bone)}
+.btn-solid:hover{background:var(--clay);border-color:var(--clay);color:#fff}
+.btn-ink{background:var(--ink);color:var(--bone);border-color:var(--ink)}
+.btn-ink:hover{background:var(--clay);border-color:var(--clay)}
+.btn-ghost:hover{background:currentColor}
+.btn-ghost:hover span{color:var(--ink)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.eyebrow{font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;font-weight:600}
+/* reveal */
+.rv{opacity:0;transform:translateY(30px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+.no-js .rv{opacity:1;transform:none}
+/* hero */
+.hero-img{animation:heroZoom 2.4s cubic-bezier(.2,.7,.2,1) both}
+@keyframes heroZoom{from{transform:scale(1.12);filter:grayscale(1)}to{transform:scale(1);filter:grayscale(.15)}}
+.hl span{display:block;overflow:hidden}
+.hl span i{display:block;font-style:normal;animation:up 1.1s cubic-bezier(.2,.7,.2,1) both}
+.hl span:nth-child(2) i{animation-delay:.12s}.hl span:nth-child(3) i{animation-delay:.24s}
+@keyframes up{from{transform:translateY(105%)}to{transform:none}}
+/* intro */
+#intro{position:fixed;inset:0;background:var(--ink);z-index:100;display:grid;place-items:center;animation:introOut .6s 1.1s forwards}
+#intro p{color:var(--bone);font-size:clamp(2rem,8vw,5rem);animation:introIn .8s both}
+@keyframes introIn{from{letter-spacing:.6em;opacity:0}to{letter-spacing:.05em;opacity:1}}
+@keyframes introOut{to{transform:translateY(-100%);visibility:hidden}}
+/* marquee */
+.mq{display:flex;width:max-content;animation:mq 30s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}
+/* product card */
+.card .ph{aspect-ratio:4/5;overflow:hidden;position:relative;background:#d9d4ca}
+.card .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1s cubic-bezier(.2,.7,.2,1),opacity .6s}
+.card .ph img.alt{position:absolute;inset:0;opacity:0}
+@media(hover:hover){.card:hover .ph img.alt{opacity:1}.card:hover .ph img{transform:scale(1.04)}}
+.chip{padding:.55rem 1rem;border:1.5px solid var(--ink);font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;background:transparent;min-height:40px}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bone)}
+.sz{min-width:48px;min-height:44px;border:1.5px solid var(--ink);background:transparent;font-weight:600;cursor:pointer}
+.sz[aria-checked=true]{background:var(--ink);color:var(--bone)}
+.sz:disabled{opacity:.3;text-decoration:line-through;cursor:not-allowed}
+.sw{width:34px;height:34px;border-radius:50%;border:2px solid var(--bone);outline:1.5px solid var(--line);cursor:pointer}
+.sw[aria-checked=true]{outline:2px solid var(--ink)}
+/* drawers */
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(460px,100%);background:var(--bone);z-index:60;transform:translateX(100%);transition:transform .5s cubic-bezier(.2,.7,.2,1);display:flex;flex-direction:column}
+.drawer.open{transform:none}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:55;opacity:0;pointer-events:none;transition:opacity .4s}
+.scrim.open{opacity:1;pointer-events:auto}
+#mnav{position:fixed;inset:0;background:var(--ink);color:var(--bone);z-index:70;clip-path:inset(0 0 100% 0);transition:clip-path .6s cubic-bezier(.7,0,.2,1);visibility:hidden}
+#mnav.open{clip-path:inset(0);visibility:visible}
+dialog{border:0;padding:0;max-width:min(1040px,94vw);width:100%;background:var(--bone);color:var(--ink)}
+dialog::backdrop{background:rgba(0,0,0,.65)}
+.bump{animation:bump .5s}
+@keyframes bump{50%{transform:scale(1.35)}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,150%);background:var(--ink);color:var(--bone);padding:1rem 1.4rem;z-index:90;transition:transform .4s;font-size:.85rem;max-width:90vw}
+.toast.show{transform:translate(-50%,0)}
+.outline-txt{color:transparent;-webkit-text-stroke:1.5px var(--bone)}
+.grain{background-image:radial-gradient(rgba(0,0,0,.06) 1px,transparent 1px);background-size:3px 3px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}#intro{display:none}}
+</style>
+</head>
+<body class="no-js">
+<script>document.body.classList.remove('no-js')</script>
+<div id="intro" aria-hidden="true"><p class="disp">City Kings</p></div>
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:bg-white focus:p-3">Skip to content</a>
+
+<!-- ANNOUNCEMENT (edit text in CONFIG.announcement) -->
+<div class="bg-[var(--ink)] text-[var(--bone)] text-center py-2 px-4 text-[11px] tracking-[.25em] uppercase" id="announce">New collection — order directly via WhatsApp</div>
+
+<header id="hdr" class="sticky top-0 z-50 bg-[var(--bone)]/90 backdrop-blur border-b border-[var(--line)] transition-all">
+  <nav class="max-w-[1500px] mx-auto px-5 md:px-10 h-16 flex items-center justify-between" aria-label="Main">
+    <ul class="hidden lg:flex gap-8 text-[12px] font-semibold tracking-[.18em] uppercase">
+      <li><a href="#new" class="hover:text-[var(--clay)]">New Arrivals</a></li>
+      <li><a href="#shop" class="hover:text-[var(--clay)]">Shop</a></li>
+      <li><a href="#collections" class="hover:text-[var(--clay)]">Collections</a></li>
+    </ul>
+    <button id="menuBtn" class="lg:hidden p-2 -ml-2" aria-label="Open menu" aria-expanded="false" aria-controls="mnav">
+      <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h20M3 18h14"/></svg>
+    </button>
+    <!-- LOGO: replace this wordmark with <img src="assets/images/city-kings-logo.png" alt="CITY KINGS"> -->
+    <a href="#top" class="disp text-2xl md:text-3xl tracking-wide flex items-center gap-2" aria-label="CITY KINGS home">
+      <svg width="22" height="18" viewBox="0 0 22 18" aria-hidden="true"><path d="M1 17h20L19 4l-4 6-4-9-4 9-4-6z" fill="var(--clay)"/></svg>City Kings
+    </a>
+    <div class="flex items-center gap-8">
+      <ul class="hidden lg:flex gap-8 text-[12px] font-semibold tracking-[.18em] uppercase">
+        <li><a href="#story" class="hover:text-[var(--clay)]">Our Story</a></li>
+        <li><a href="#contact" class="hover:text-[var(--clay)]">Contact</a></li>
+      </ul>
+      <button id="cartBtn" class="relative p-2 -mr-2" aria-label="Open bag, 0 items">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 8h14l-1 13H6zM9 8V6a3 3 0 016 0v2"/></svg>
+        <span id="cartCount" class="absolute -top-0 -right-0 bg-[var(--clay)] text-white text-[10px] font-bold w-5 h-5 rounded-full grid place-items-center">0</span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- MOBILE NAV -->
+<div id="mnav" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="flex justify-between items-center px-5 h-16 border-b border-white/15">
+    <span class="disp text-2xl">City Kings</span>
+    <button id="menuClose" class="p-2" aria-label="Close menu"><svg width="24" height="24" stroke="currentColor" stroke-width="2"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <ul class="px-5 pt-10 space-y-2">
+    <li><a href="#new" class="disp text-6xl block py-1">New</a></li>
+    <li><a href="#shop" class="disp text-6xl block py-1">Shop</a></li>
+    <li><a href="#collections" class="disp text-6xl block py-1">Collections</a></li>
+    <li><a href="#story" class="disp text-6xl block py-1">Our Story</a></li>
+    <li><a href="#contact" class="disp text-6xl block py-1 text-[var(--clay)]">Contact</a></li>
+  </ul>
+</div>
+
+<main id="main">
+<!-- HERO -->
+<section id="top" class="relative bg-[var(--ink)] text-[var(--bone)] overflow-hidden">
+  <div class="grid lg:grid-cols-12 min-h-[calc(100svh-100px)]">
+    <div class="lg:col-span-7 relative h-[62svh] lg:h-auto overflow-hidden">
+      <img class="hero-img absolute inset-0 w-full h-full object-cover object-[50%_25%]" src="https://images.pexels.com/photos/20340057/pexels-photo-20340057.jpeg?auto=compress&cs=tinysrgb&w=1400" width="1400" height="1750" alt="Model in a black jacket and jeans — demo campaign image" fetchpriority="high">
+      <div class="absolute inset-0 bg-gradient-to-t from-[var(--ink)] via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-[var(--ink)]/70"></div>
+      <p class="absolute top-5 left-5 eyebrow text-white/80">Campaign 01 — Maseru, Lesotho</p>
+    </div>
+    <div class="lg:col-span-5 relative flex flex-col justify-end p-5 pb-10 md:p-10 lg:p-14 -mt-28 lg:mt-0 z-10">
+      <p class="eyebrow text-[var(--gold)] mb-5">City Kings — Built Different</p>
+      <h1 class="disp hl text-[clamp(3.6rem,13vw,9.5rem)] lg:-ml-[22%]">
+        <span><i>Not made</i></span><span><i>to blend</i></span><span><i class="text-[var(--clay)]">in.</i></span>
+      </h1>
+      <p class="mt-6 max-w-sm text-white/75 leading-relaxed">Streetwear from Lesotho, cut for the ones who walk into the room and set the tone.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#shop" class="btn btn-solid">Explore the Collection →</a>
+        <a href="#story" class="btn btn-ghost"><span>Discover City Kings</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="bg-[var(--clay)] text-white py-3 overflow-hidden" aria-hidden="true">
+  <div class="mq disp text-2xl gap-10">
+    <span class="flex gap-10 pr-10">BUILT DIFFERENT ✦ MADE IN THE MOUNTAIN KINGDOM ✦ CITY KINGS ✦ NOT MADE TO BLEND IN ✦ BUILT DIFFERENT ✦ CITY KINGS ✦</span>
+    <span class="flex gap-10 pr-10">BUILT DIFFERENT ✦ MADE IN THE MOUNTAIN KINGDOM ✦ CITY KINGS ✦ NOT MADE TO BLEND IN ✦ BUILT DIFFERENT ✦ CITY KINGS ✦</span>
+  </div>
+</div>
+
+<!-- NEW ARRIVALS -->
+<section id="new" class="max-w-[1500px] mx-auto px-5 md:px-10 py-20 md:py-28">
+  <div class="flex flex-wrap items-end justify-between gap-6 mb-12 rv">
+    <div>
+      <p class="eyebrow text-[var(--clay)] mb-3">01 / Just dropped</p>
+      <h2 class="disp text-[clamp(3rem,9vw,7rem)]">New<br>Arrivals</h2>
+    </div>
+    <p class="max-w-xs text-sm text-[var(--mute)]">Demo catalogue — names, prices and stock are editable samples until replaced with verified CITY KINGS products.</p>
+  </div>
+  <div id="newGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-x-4 md:gap-x-6 gap-y-12"></div>
+</section>
+
+<!-- STATEMENT -->
+<section class="bg-[var(--ink)] text-[var(--bone)] py-24 md:py-36 overflow-hidden relative">
+  <div class="max-w-[1500px] mx-auto px-5 md:px-10 grid md:grid-cols-12 gap-8 items-center">
+    <h2 class="disp md:col-span-8 text-[clamp(3rem,10vw,9rem)] rv">From the<br><span class="outline-txt">Mountain</span><br>Kingdom<span class="text-[var(--clay)]">.</span></h2>
+    <div class="md:col-span-4 rv">
+      <img src="https://images.pexels.com/photos/4118957/pexels-photo-4118957.jpeg?auto=compress&cs=tinysrgb&w=700" width="700" height="1050" loading="lazy" alt="Street portrait in hoodie and jacket — demo image" class="w-full aspect-[3/4] object-cover grayscale mb-6">
+      <p class="text-white/70 leading-relaxed">Wear it like you mean it. CITY KINGS is about owning your lane — at home in Lesotho and wherever the road leads next.</p>
+    </div>
+  </div>
+</section>
+
+<!-- COLLECTIONS -->
+<section id="collections" class="py-20 md:py-28">
+  <div class="max-w-[1500px] mx-auto px-5 md:px-10">
+    <div class="mb-12 rv"><p class="eyebrow text-[var(--clay)] mb-3">02 / Collections</p><h2 class="disp text-[clamp(3rem,9vw,7rem)]">Choose your<br>chapter</h2></div>
+    <div id="collGrid" class="grid md:grid-cols-3 gap-4 md:gap-6"></div>
+  </div>
+</section>
+
+<!-- SHOP -->
+<section id="shop" class="bg-[#e5e0d6] grain py-20 md:py-28">
+  <div class="max-w-[1500px] mx-auto px-5 md:px-10">
+    <div class="flex flex-wrap justify-between items-end gap-6 mb-10 rv">
+      <div><p class="eyebrow text-[var(--clay)] mb-3">03 / The full range</p><h2 class="disp text-[clamp(3rem,9vw,7rem)]">Shop</h2></div>
+      <label class="w-full md:w-80"><span class="sr-only">Search products</span>
+        <input id="search" type="search" placeholder="Search tees, hoodies…" class="w-full bg-transparent border-b-2 border-[var(--ink)] py-3 text-lg outline-none placeholder:text-[var(--mute)]">
+      </label>
+    </div>
+    <div class="flex flex-wrap gap-2 mb-4" id="catChips" role="group" aria-label="Filter by category"></div>
+    <div class="flex flex-wrap items-center gap-2 mb-10" id="collChips" role="group" aria-label="Filter by collection"></div>
+    <div class="flex justify-between items-center mb-6 text-sm">
+      <p id="resultCount" aria-live="polite"></p>
+      <label class="flex items-center gap-2"><span class="text-[var(--mute)]">Sort</span>
+        <select id="sort" class="bg-transparent border-b border-[var(--ink)] py-1"><option value="feat">Featured</option><option value="lo">Price: low → high</option><option value="hi">Price: high → low</option></select>
+      </label>
+    </div>
+    <div id="shopGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 md:gap-x-6 gap-y-12"></div>
+    <div id="empty" class="hidden text-center py-20"><p class="disp text-5xl mb-4">Nothing here yet</p><p class="text-[var(--mute)] mb-6">Try another search or filter.</p><button class="btn btn-ink" id="resetF">Reset filters</button></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="py-20 md:py-28 max-w-[1500px] mx-auto px-5 md:px-10" aria-labelledby="gal">
+  <div class="flex justify-between items-end mb-10 rv"><h2 id="gal" class="disp text-[clamp(3rem,9vw,7rem)]">The<br>Campaign</h2><p class="eyebrow text-[var(--mute)]">04 / Lookbook</p></div>
+  <div class="grid grid-cols-2 md:grid-cols-12 gap-3 md:gap-5">
+    <figure class="col-span-2 md:col-span-7 md:row-span-2 rv"><img loading="lazy" src="https://images.pexels.com/photos/28484979/pexels-photo-28484979.jpeg?auto=compress&cs=tinysrgb&w=1200" width="1200" height="1500" alt="Rooftop night portrait — demo lookbook image" class="w-full h-full object-cover aspect-[4/5]"></figure>
+    <figure class="md:col-span-5 rv"><img loading="lazy" src="https://images.pexels.com/photos/14927044/pexels-photo-14927044.jpeg?auto=compress&cs=tinysrgb&w=900" width="900" height="600" alt="Model with sunglasses against textured wall — demo" class="w-full aspect-[3/4] md:aspect-[3/2] object-cover"></figure>
+    <figure class="md:col-span-5 rv"><img loading="lazy" src="https://images.pexels.com/photos/4394951/pexels-photo-4394951.jpeg?auto=compress&cs=tinysrgb&w=900" width="900" height="1200" alt="Model in hoodie seated — demo" class="w-full aspect-[3/4] md:aspect-[3/2] object-cover object-top"></figure>
+    <figure class="col-span-2 md:col-span-12 rv relative"><img loading="lazy" src="https://images.pexels.com/photos/39646824/pexels-photo-39646824.jpeg?auto=compress&cs=tinysrgb&w=1600" width="1600" height="1150" alt="Street portrait in city setting — demo" class="w-full aspect-[16/9] md:aspect-[21/9] object-cover"><figcaption class="absolute bottom-4 left-4 disp text-[var(--bone)] text-4xl md:text-7xl">Own your lane</figcaption></figure>
+  </div>
+</section>
+
+<!-- STORY -->
+<section id="story" class="bg-[var(--clay)] text-white py-20 md:py-32">
+  <div class="max-w-[1500px] mx-auto px-5 md:px-10 grid lg:grid-cols-12 gap-10 items-center">
+    <img loading="lazy" src="https://images.pexels.com/photos/4212003/pexels-photo-4212003.jpeg?auto=compress&cs=tinysrgb&w=900" width="900" height="1350" alt="Portrait — placeholder for founder photo" class="lg:col-span-5 w-full aspect-[4/5] object-cover rv">
+    <div class="lg:col-span-6 lg:col-start-7 rv">
+      <p class="eyebrow mb-4 text-white/80">05 / Our Story</p>
+      <h2 class="disp text-[clamp(3rem,8vw,6.5rem)] mb-8">Kings of<br>our own city</h2>
+      <!-- EDITABLE DRAFT: replace with verified founder story -->
+      <p class="text-lg leading-relaxed text-white/90 mb-5">CITY KINGS is a clothing brand born in Lesotho. It started with a simple idea: the streets we grew up on deserve their own uniform.</p>
+      <p class="leading-relaxed text-white/80 mb-8">[Draft — replace with verified details: founder names, founding year, where pieces are designed and made.]</p>
+      <a href="#shop" class="btn btn-ghost"><span>Shop the collection</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section class="py-20 md:py-28 max-w-[1500px] mx-auto px-5 md:px-10 text-center">
+  <p class="eyebrow text-[var(--clay)] mb-3 rv">06 / Community</p>
+  <h2 class="disp text-[clamp(2.6rem,8vw,6rem)] mb-6 rv">Wear it. Tag it.<br>Rep the kingdom.</h2>
+  <p class="text-[var(--mute)] mb-10 rv">Follow CITY KINGS for drops, restocks and behind-the-scenes.</p>
+  <div class="grid grid-cols-3 md:grid-cols-6 gap-2 mb-10" id="socialGrid"></div>
+  <a id="fbLink" href="https://www.facebook.com/" target="_blank" rel="noopener" class="btn btn-ink">Follow on Facebook ↗</a>
+</section>
+</main>
+
+<!-- FOOTER -->
+<footer id="contact" class="bg-[var(--ink)] text-[var(--bone)] pt-20 pb-8">
+  <div class="max-w-[1500px] mx-auto px-5 md:px-10">
+    <p class="disp text-[clamp(4rem,18vw,16rem)] leading-none mb-14">City Kings</p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10 text-sm border-t border-white/15 pt-10">
+      <div><h3 class="eyebrow text-[var(--gold)] mb-4">Shop</h3><ul class="space-y-2 text-white/70"><li><a href="#new">New Arrivals</a></li><li><a href="#shop">All Products</a></li><li><a href="#collections">Collections</a></li></ul></div>
+      <div><h3 class="eyebrow text-[var(--gold)] mb-4">Brand</h3><ul class="space-y-2 text-white/70"><li><a href="#story">Our Story</a></li><li><a href="#top">Campaign</a></li></ul></div>
+      <div><h3 class="eyebrow text-[var(--gold)] mb-4">Contact</h3><ul class="space-y-2 text-white/70"><li>Lesotho</li><li><button id="waFooter" class="underline">Message us on WhatsApp</button></li><li id="emailLine"></li></ul></div>
+      <div><h3 class="eyebrow text-[var(--gold)] mb-4">Follow</h3><ul class="space-y-2 text-white/70"><li><a id="fbFoot" href="https://www.facebook.com/" target="_blank" rel="noopener">Facebook ↗</a></li></ul><p class="mt-6 text-white/50 text-xs">Shipping & returns: details confirmed on WhatsApp at the time of order.</p></div>
+    </div>
+    <div class="flex flex-wrap justify-between gap-4 mt-16 text-xs text-white/40">
+      <p>© <span id="yr"></span> CITY KINGS. All rights reserved.</p>
+      <p>Demo imagery via Pexels — replace with official CITY KINGS assets before launch.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="cart" aria-label="Shopping bag" aria-hidden="true">
+  <div class="flex justify-between items-center p-5 border-b border-[var(--line)]">
+    <h2 class="disp text-3xl">Your Bag</h2>
+    <button id="cartClose" class="p-2" aria-label="Close bag"><svg width="24" height="24" stroke="currentColor" stroke-width="2"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  </div>
+  <div id="cartItems" class="flex-1 overflow-y-auto p-5 space-y-5"></div>
+  <div class="p-5 border-t border-[var(--line)] space-y-4">
+    <div class="flex justify-between font-semibold"><span>Estimated total</span><span id="cartTotal">M0.00</span></div>
+    <label class="block text-sm"><span class="text-[var(--mute)]">Your name (optional)</span><input id="custName" class="w-full border-b border-[var(--ink)] bg-transparent py-2 outline-none"></label>
+    <button id="waOrder" class="btn btn-ink w-full justify-center">Send order via WhatsApp</button>
+    <p class="text-xs text-[var(--mute)]">This opens WhatsApp with your order summary for you to review and send. Your order is only confirmed once CITY KINGS replies. No payment is taken on this site.</p>
+  </div>
+</aside>
+
+<!-- QUICK VIEW -->
+<dialog id="qv" aria-labelledby="qvTitle"><div id="qvBody"></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =========================================================
+   CONFIG — edit business details here (single source of truth)
+   ========================================================= */
+const CONFIG = {
+  whatsapp: "",            // e.g. "26650000000" (international format, digits only). Empty = user picks contact in WhatsApp.
+  email: "",               // e.g. "hello@citykings.co.ls"
+  facebook: "https://www.facebook.com/", // replace with official CITY KINGS page URL
+  currency: "M",           // Maloti
+  announcement: "New collection — order directly via WhatsApp"
+};
+
+/* =========================================================
+   PRODUCTS — DEMO DATA. Replace with verified catalogue.
+   sizes: {S:true,M:false} => false = sold out (not purchasable)
+   ========================================================= */
+const IMG = id => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=800`;
+const COLLECTIONS = [
+  {id:"core", name:"Core", blurb:"Everyday essentials. The foundation of the crown.", img:IMG(20340057)},
+  {id:"after-dark", name:"After Dark", blurb:"Black-on-black pieces for night moves.", img:IMG(28484979)},
+  {id:"heritage", name:"Highlands", blurb:"Heavier layers built for mountain weather.", img:IMG(4394951)}
+];
+const PRODUCTS = [
+  {id:"ck-01",name:"Crown Logo Tee",cat:"Tees",coll:"core",price:350,isNew:true,colors:[{n:"Black",h:"#111"},{n:"Bone",h:"#ebe5d8"}],sizes:{S:true,M:true,L:true,XL:false},imgs:[IMG(4118957),IMG(3214726)],desc:"Heavyweight cotton tee with chest logo. Relaxed fit."},
+  {id:"ck-02",name:"Kingdom Hoodie",cat:"Hoodies",coll:"heritage",price:650,isNew:true,colors:[{n:"Black",h:"#111"},{n:"Clay",h:"#b8452a"}],sizes:{S:false,M:true,L:true,XL:true},imgs:[IMG(4394951),IMG(27396724)],desc:"Brushed fleece hoodie with embroidered crown."},
+  {id:"ck-03",name:"Night Shift Jacket",cat:"Outerwear",coll:"after-dark",price:950,isNew:true,colors:[{n:"Black",h:"#111"}],sizes:{M:true,L:true,XL:false},imgs:[IMG(20340057),IMG(28484979)],desc:"Lightweight shell jacket with tonal branding."},
+  {id:"ck-04",name:"Built Different Crewneck",cat:"Sweaters",coll:"core",price:550,isNew:true,colors:[{n:"Bone",h:"#ebe5d8"},{n:"Olive",h:"#5a5a3c"}],sizes:{S:true,M:true,L:false,XL:true},imgs:[IMG(4212003),IMG(39490799)],desc:"Midweight crewneck with puff-print slogan."},
+  {id:"ck-05",name:"City Cap",cat:"Accessories",coll:"core",price:250,isNew:false,colors:[{n:"Black",h:"#111"}],sizes:{"One size":true},imgs:[IMG(27396724),IMG(4118957)],desc:"Six-panel cap with embroidered wordmark."},
+  {id:"ck-06",name:"Blackout Tee",cat:"Tees",coll:"after-dark",price:350,isNew:false,colors:[{n:"Black",h:"#111"}],sizes:{S:true,M:true,L:true,XL:true},imgs:[IMG(39490799),IMG(20340057)],desc:"Tonal black-on-black logo tee."},
+  {id:"ck-07",name:"Highlands Puffer",cat:"Outerwear",coll:"heritage",price:1200,isNew:false,colors:[{n:"Black",h:"#111"},{n:"Clay",h:"#b8452a"}],sizes:{S:false,M:false,L:false},imgs:[IMG(3214726),IMG(4394951)],desc:"Insulated puffer for cold Maseru mornings."},
+  {id:"ck-08",name:"Kings Track Pant",cat:"Bottoms",coll:"after-dark",price:600,isNew:false,colors:[{n:"Black",h:"#111"}],sizes:{S:true,M:true,L:true},imgs:[IMG(28484979),IMG(39490799)],desc:"Tapered track pant with side stripe."}
+];
+
+/* ===== helpers ===== */
+const $ = s => document.querySelector(s);
+const money = n => CONFIG.currency + n.toFixed(2);
+const inStock = p => Object.values(p.sizes).some(Boolean);
+const collName = id => (COLLECTIONS.find(c=>c.id===id)||{}).name||"";
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2600)}
+
+/* ===== config wiring ===== */
+$("#announce").textContent = CONFIG.announcement;
+$("#yr").textContent = new Date().getFullYear();
+$("#fbLink").href = $("#fbFoot").href = CONFIG.facebook;
+if(CONFIG.email) $("#emailLine").innerHTML = `<a href="mailto:${CONFIG.email}">${CONFIG.email}</a>`;
+const waURL = text => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
+$("#waFooter").onclick = () => window.open(waURL("Hi CITY KINGS, I have a question."),"_blank","noopener");
+
+/* ===== cards ===== */
+function card(p, i){
+  const avail = inStock(p);
+  return `<article class="card rv" style="transition-delay:${(i%4)*80}ms">
+    <button class="block w-full text-left" data-qv="${p.id}" aria-label="Quick view ${p.name}">
+      <div class="ph">
+        <img src="${p.imgs[0]}" alt="${p.name} — demo image" loading="lazy" width="800" height="1000">
+        ${p.imgs[1]?`<img class="alt" src="${p.imgs[1]}" alt="" loading="lazy" width="800" height="1000">`:""}
+        <span class="absolute top-3 left-3 text-[10px] font-bold tracking-[.18em] uppercase px-2 py-1 ${avail?'bg-[var(--bone)]':'bg-[var(--ink)] text-[var(--bone)]'}">${avail?(p.isNew?'New':collName(p.coll)):'Sold out'}</span>
+      </div>
+    </button>
+    <div class="pt-4 flex justify-between gap-3">
+      <div><h3 class="font-semibold text-sm md:text-base">${p.name}</h3>
+        <p class="text-xs text-[var(--mute)] mt-1">${p.colors.length} colour${p.colors.length>1?'s':''} · ${p.cat}</p>
+        <div class="flex gap-1 mt-2">${p.colors.map(c=>`<span class="w-3 h-3 rounded-full border border-black/20" style="background:${c.h}" title="${c.n}"></span>`).join("")}</div>
+      </div>
+      <p class="font-semibold text-sm whitespace-nowrap">${money(p.price)}</p>
+    </div>
+    <button data-qv="${p.id}" class="mt-3 w-full text-[11px] font-bold tracking-[.18em] uppercase border-b-2 border-[var(--ink)] py-2 text-left hover:text-[var(--clay)]">${avail?'Choose size →':'View details'}</button>
+  </article>`;
+}
+
+/* ===== render new + collections + social ===== */
+$("#newGrid").innerHTML = PRODUCTS.filter(p=>p.isNew).slice(0,4).map(card).join("");
+$("#collGrid").innerHTML = COLLECTIONS.map((c,i)=>`
+  <a href="#shop" data-coll="${c.id}" class="group relative block overflow-hidden rv ${i===1?'md:mt-16':''}">
+    <img src="${c.img}" alt="${c.name} collection — demo image" loading="lazy" width="800" height="1000" class="w-full aspect-[3/4] object-cover transition-transform duration-1000 group-hover:scale-105">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
+    <div class="absolute bottom-0 p-6 text-[var(--bone)]">
+      <p class="eyebrow text-[var(--gold)] mb-2">0${i+1}</p>
+      <h3 class="disp text-5xl md:text-6xl">${c.name}</h3>
+      <p class="text-sm text-white/75 mt-2 max-w-xs">${c.blurb}</p>
+      <span class="inline-block mt-4 text-[11px] font-bold tracking-[.2em] uppercase border-b border-current">Shop ${c.name} →</span>
+    </div></a>`).join("");
+$("#socialGrid").innerHTML = [4118957,28484979,4394951,20340057,4212003,27396724].map(id=>`<a href="${CONFIG.facebook}" target="_blank" rel="noopener" class="block overflow-hidden group"><img src="https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=400" loading="lazy" width="400" height="400" alt="CITY KINGS on Facebook — demo image" class="aspect-square w-full object-cover grayscale group-hover:grayscale-0 transition duration-500"></a>`).join("");
+
+/* ===== shop filters ===== */
+const state = {cat:"All", coll:"All", q:"", sort:"feat"};
+const cats = ["All", ...new Set(PRODUCTS.map(p=>p.cat))];
+function chips(){
+  $("#catChips").innerHTML = cats.map(c=>`<button class="chip" data-cat="${c}" aria-pressed="${state.cat===c}">${c}</button>`).join("");
+  $("#collChips").innerHTML = `<span class="eyebrow text-[var(--mute)] mr-2">Collection</span>`+["All",...COLLECTIONS.map(c=>c.id)].map(c=>`<button class="chip !border-[var(--line)]" data-collf="${c}" aria-pressed="${state.coll===c}">${c==="All"?"All":collName(c)}</button>`).join("");
+}
+function renderShop(){
+  const q = state.q.toLowerCase();
+  let list = PRODUCTS.filter(p=>(state.cat==="All"||p.cat===state.cat)&&(state.coll==="All"||p.coll===state.coll)&&(!q||(p.name+" "+p.cat+" "+p.colors.map(c=>c.n).join(" ")).toLowerCase().includes(q)));
+  if(state.sort==="lo") list.sort((a,b)=>a.price-b.price);
+  if(state.sort==="hi") list.sort((a,b)=>b.price-a.price);
+  $("#shopGrid").innerHTML = list.map(card).join("");
+  $("#empty").classList.toggle("hidden", list.length>0);
+  $("#resultCount").textContent = `${list.length} product${list.length!==1?'s':''}`;
+  chips(); observe();
+}
+document.addEventListener("click", e=>{
+  const c=e.target.closest("[data-cat]"); if(c){state.cat=c.dataset.cat;renderShop()}
+  const f=e.target.closest("[data-collf]"); if(f){state.coll=f.dataset.collf;renderShop()}
+  const k=e.target.closest("[data-coll]"); if(k){state.coll=k.dataset.coll;state.cat="All";renderShop()}
+  const q=e.target.closest("[data-qv]"); if(q) openQV(q.dataset.qv);
+});
+$("#search").addEventListener("input", e=>{state.q=e.target.value;renderShop()});
+$("#sort").addEventListener("change", e=>{state.sort=e.target.value;renderShop()});
+$("#resetF").onclick=()=>{Object.assign(state,{cat:"All",coll:"All",q:""});$("#search").value="";renderShop()};
+
+/* ===== quick view ===== */
+const qv = $("#qv");
+function openQV(id){
+  const p = PRODUCTS.find(x=>x.id===id); if(!p) return;
+  const sel = {size:null, color:p.colors[0].n, qty:1, img:0};
+  const avail = inStock(p);
+  const draw = () => {
+    $("#qvBody").innerHTML = `
+    <div class="grid md:grid-cols-2 max-h-[90vh] overflow-y-auto">
+      <div class="bg-[#d9d4ca]">
+        <img src="${p.imgs[sel.img]}" alt="${p.name} — image ${sel.img+1}" class="w-full aspect-[4/5] object-cover" width="800" height="1000">
+        ${p.imgs.length>1?`<div class="flex gap-2 p-3">${p.imgs.map((s,i)=>`<button data-img="${i}" aria-label="View image ${i+1}" class="w-16 aspect-[4/5] overflow-hidden ${i===sel.img?'outline outline-2 outline-[var(--ink)]':'opacity-60'}"><img src="${s}" alt="" class="w-full h-full object-cover"></button>`).join("")}</div>`:""}
+      </div>
+      <div class="p-6 md:p-10 flex flex-col">
+        <div class="flex justify-between items-start gap-4"><p class="eyebrow text-[var(--clay)]">${collName(p.coll)} · ${p.cat}</p>
+          <button id="qvClose" class="p-2 -m-2" aria-label="Close"><svg width="24" height="24" stroke="currentColor" stroke-width="2"><path d="M5 5l14 14M19 5L5 19"/></svg></button></div>
+        <h2 id="qvTitle" class="disp text-5xl mt-3">${p.name}</h2>
+        <p class="text-xl font-semibold mt-3">${money(p.price)} <span class="text-xs font-normal text-[var(--mute)]">(demo price)</span></p>
+        <p class="text-[var(--mute)] mt-4 leading-relaxed">${p.desc}</p>
+        <fieldset class="mt-6"><legend class="eyebrow mb-3">Colour — ${sel.color}</legend>
+          <div class="flex gap-3" role="radiogroup">${p.colors.map(c=>`<button role="radio" aria-checked="${sel.color===c.n}" aria-label="${c.n}" data-color="${c.n}" class="sw" style="background:${c.h}"></button>`).join("")}</div></fieldset>
+        <fieldset class="mt-6"><legend class="eyebrow mb-3">Size</legend>
+          <div class="flex flex-wrap gap-2" role="radiogroup">${Object.entries(p.sizes).map(([s,ok])=>`<button role="radio" aria-checked="${sel.size===s}" data-size="${s}" class="sz px-3" ${ok?'':'disabled aria-label="'+s+' sold out"'}>${s}</button>`).join("")}</div></fieldset>
+        <div class="mt-6 flex items-center gap-4"><span class="eyebrow">Qty</span>
+          <div class="flex border-1.5 border border-[var(--ink)]"><button data-q="-1" class="w-11 h-11" aria-label="Decrease quantity">−</button><span class="w-10 grid place-items-center font-semibold" aria-live="polite">${sel.qty}</span><button data-q="1" class="w-11 h-11" aria-label="Increase quantity">+</button></div></div>
+        <div class="mt-8 grid gap-3">
+          <button id="addBag" class="btn btn-ink justify-center" ${avail?'':'disabled'}>${avail?(sel.size?'Add to bag':'Select a size'):'Sold out'}</button>
+          <button id="waNow" class="btn justify-center" ${avail?'':'disabled'}>Order this via WhatsApp</button>
+        </div>
+      </div>
+    </div>`;
+  };
+  draw();
+  qv.onclick = e => {
+    if(e.target===qv) return qv.close();
+    const t = e.target.closest("button"); if(!t) return;
+    if(t.id==="qvClose") return qv.close();
+    if(t.dataset.img) {sel.img=+t.dataset.img; draw();}
+    else if(t.dataset.color) {sel.color=t.dataset.color; draw();}
+    else if(t.dataset.size) {sel.size=t.dataset.size; draw(); $(`[data-size="${sel.size}"]`).focus();}
+    else if(t.dataset.q) {sel.qty=Math.max(1,Math.min(10,sel.qty+ +t.dataset.q)); draw();}
+    else if(t.id==="addBag"||t.id==="waNow"){
+      if(!sel.size){toast("Please select a size first.");return}
+      if(t.id==="addBag"){addToCart(p,sel);qv.close();toast(`${p.name} added to bag`)}
+      else window.open(waURL(orderMsg([{name:p.name,id:p.id,size:sel.size,color:sel.color,qty:sel.qty,price:p.price}])),"_blank","noopener");
+    }
+  };
+  qv.showModal();
+}
+
+/* ===== cart (persisted in localStorage) ===== */
+let cart = JSON.parse(localStorage.getItem("ck_cart")||"[]");
+function save(){localStorage.setItem("ck_cart",JSON.stringify(cart));renderCart()}
+function addToCart(p,s){
+  const key=`${p.id}|${s.size}|${s.color}`;
+  const ex=cart.find(i=>i.key===key);
+  ex?ex.qty=Math.min(10,ex.qty+s.qty):cart.push({key,id:p.id,name:p.name,size:s.size,color:s.color,qty:s.qty,price:p.price,img:p.imgs[0]});
+  save(); const b=$("#cartCount"); b.classList.remove("bump"); void b.offsetWidth; b.classList.add("bump");
+}
+function renderCart(){
+  const n=cart.reduce((a,i)=>a+i.qty,0);
+  $("#cartCount").textContent=n; $("#cartBtn").setAttribute("aria-label",`Open bag, ${n} items`);
+  $("#cartTotal").textContent=money(cart.reduce((a,i)=>a+i.qty*i.price,0));
+  $("#waOrder").disabled=!cart.length;
+  $("#cartItems").innerHTML = cart.length ? cart.map((i,x)=>`
+    <div class="flex gap-4"><img src="${i.img}" alt="" class="w-20 aspect-[4/5] object-cover">
+      <div class="flex-1"><div class="flex justify-between gap-2"><h3 class="font-semibold text-sm">${i.name}</h3><p class="text-sm font-semibold">${money(i.price*i.qty)}</p></div>
+        <p class="text-xs text-[var(--mute)] mt-1">${i.color} · ${i.size}</p>
+        <div class="flex justify-between items-center mt-3"><div class="flex border border-[var(--ink)]"><button data-cq="${x}|-1" class="w-9 h-9" aria-label="Decrease">−</button><span class="w-8 grid place-items-center text-sm">${i.qty}</span><button data-cq="${x}|1" class="w-9 h-9" aria-label="Increase">+</button></div>
+        <button data-rm="${x}" class="text-xs underline text-[var(--mute)]">Remove</button></div></div></div>`).join("")
+    : `<div class="text-center py-16"><p class="disp text-4xl mb-3">Your bag is empty</p><a href="#shop" class="underline text-sm" id="emptyShop">Start shopping</a></div>`;
+}
+$("#cartItems").addEventListener("click",e=>{
+  const q=e.target.closest("[data-cq]"),r=e.target.closest("[data-rm]");
+  if(q){const [x,d]=q.dataset.cq.split("|").map(Number);cart[x].qty+=d;if(cart[x].qty<1)cart.splice(x,1);else cart[x].qty=Math.min(10,cart[x].qty);save()}
+  if(r){cart.splice(+r.dataset.rm,1);save()}
+  if(e.target.id==="emptyShop") toggleCart(false);
+});
+function orderMsg(items){
+  const name=($("#custName")||{}).value?.trim();
+  let m=`Hi CITY KINGS, I'd like to order:\n\n`;
+  items.forEach((i,n)=>m+=`${n+1}. ${i.name} (${i.id})\n   Colour: ${i.color} | Size: ${i.size} | Qty: ${i.qty}\n   ${money(i.price*i.qty)}\n`);
+  m+=`\nEstimated total: ${money(items.reduce((a,i)=>a+i.qty*i.price,0))}\n`;
+  if(name) m+=`Name: ${name}\n`;
+  return m+`\nPlease confirm availability, payment and delivery. Thank you!`;
+}
+$("#waOrder").onclick=()=>{if(cart.length)window.open(waURL(orderMsg(cart)),"_blank","noopener")};
+function toggleCart(open){
+  $("#cart").classList.toggle("open",open);$("#scrim").classList.toggle("open",open);
+  $("#cart").setAttribute("aria-hidden",!open);
+  if(open) $("#cartClose").focus(); else $("#cartBtn").focus();
+}
+$("#cartBtn").onclick=()=>toggleCart(true);
+$("#cartClose").onclick=$("#scrim").onclick=()=>toggleCart(false);
+
+/* ===== mobile menu ===== */
+const mnav=$("#mnav");
+function menu(open){mnav.classList.toggle("open",open);$("#menuBtn").setAttribute("aria-expanded",open);document.body.style.overflow=open?"hidden":"";(open?$("#menuClose"):$("#menuBtn")).focus()}
+$("#menuBtn").onclick=()=>menu(true);$("#menuClose").onclick=()=>menu(false);
+mnav.querySelectorAll("a").forEach(a=>a.onclick=()=>menu(false));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(mnav.classList.contains("open"))menu(false);if($("#cart").classList.contains("open"))toggleCart(false)}});
+
+/* ===== reveal on scroll ===== */
+const io = "IntersectionObserver" in window ? new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target)}}),{threshold:.12}) : null;
+function observe(){document.querySelectorAll(".rv:not(.in)").forEach(el=>io?io.observe(el):el.classList.add("in"))}
+setTimeout(()=>$("#intro")?.remove(),1800);
+
+renderShop(); renderCart(); observe();
+</script>
+</body>
+</html>
